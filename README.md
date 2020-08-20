@@ -9,6 +9,10 @@ Just add https://github.com/RenanDresch/UnityVirtualPointer.git#upm to your pack
 ![installation](https://raw.githubusercontent.com/RenanDresch/Unity-Virtual-Pointer/master/Readme/pm-1.jpg)
 ![installation](https://raw.githubusercontent.com/RenanDresch/Unity-Virtual-Pointer/master/Readme/pm-2.jpg)
 
+## Sample
+You can check on how to implement the Virtual Pointer by importing the Sample within the package!
+![sample](https://raw.githubusercontent.com/RenanDresch/Unity-Virtual-Pointer/master/Readme/sample.jpg)
+
 ## How?
 
 1 -> Remove the Standalone Input Module if you have one active in your scene
