@@ -15,7 +15,7 @@ Just add https://github.com/renandresch/Unity-Virtual-Pointer#upm to your packag
 
 ![how](https://raw.githubusercontent.com/RenanDresch/Unity-Virtual-Pointer/master/Readme/tut-1.jpg)
 
-2 -> Add a pointer (image or whatever) to your canvas hierarchy, add a Virtual Pointer component to it, and don't forget to set the anchor to the lower left of your canvas
+2 -> Add a pointer (image or whatever) to your canvas hierarchy, add a Virtual Pointer component to it, and don't forget to set the anchor to the bottom left of your canvas
 
 ![how](https://raw.githubusercontent.com/RenanDresch/Unity-Virtual-Pointer/master/Readme/tut-2.jpg)
 
