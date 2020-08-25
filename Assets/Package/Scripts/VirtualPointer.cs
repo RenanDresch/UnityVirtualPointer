@@ -9,6 +9,8 @@ namespace Gaze.VirtualPointer
     {
         #region Fields
 
+        private EventSystem evSystem;
+
         private Selectable target;
         private Selectable pointerDownTarget;
 
@@ -46,6 +48,18 @@ namespace Gaze.VirtualPointer
                 }                
             }
         }
+        private EventSystem EvSystem
+        {
+            get
+            {
+                if(!evSystem)
+                {
+                    evSystem = EventSystem.current != null ? EventSystem.current : gameObject.AddComponent<EventSystem>();
+                    EventSystem.current = evSystem;
+                }
+                return evSystem;
+            }
+        }
 
         #endregion
 
@@ -68,7 +82,12 @@ namespace Gaze.VirtualPointer
                     GetDraggable();
                     if (Target)
                     {
-                        TriggerPointerDown(Target);
+                        //Unity Draggable elements will freak out if you call OnPointerDown on them!
+                        //Seriously, take a look at the ScrollBar ClickRepeat shit, it makes no sense!!!
+                        if (dragHandler == null)
+                        {
+                            TriggerPointerDown(Target);
+                        }
                         pointerDownTarget = Target;
                     }
                 }
@@ -105,7 +124,6 @@ namespace Gaze.VirtualPointer
 
             transform.position = newPosition;
             GetTarget();
-
             TriggerDrag();
         }
 
@@ -131,13 +149,33 @@ namespace Gaze.VirtualPointer
 
         #region Private Methods
 
+        private void Awake()
+        {
+            var rectTransform = GetComponent<RectTransform>();
+            if(!rectTransform)
+            {
+                var canvas = GetComponentInParent<Canvas>();
+                if (!canvas)
+                {
+                    Debug.LogError("Pointer not within a canvas!", gameObject);
+                    Destroy(this);
+                    return;
+                }
+                else
+                {
+                    rectTransform = gameObject.AddComponent<RectTransform>();
+                }
+            }
+            rectTransform.anchorMin = Vector2.zero;
+            rectTransform.anchorMax = Vector2.zero;
+        }
+
         private void GetTarget()
         {
             var pointerData = new PointerEventData(EventSystem.current);
             pointerData.position = transform.position;
 
-
-            EventSystem.current.RaycastAll(pointerData, raycastResults);
+            EvSystem.RaycastAll(pointerData, raycastResults);
 
             foreach(var result in raycastResults)
             {
@@ -156,10 +194,10 @@ namespace Gaze.VirtualPointer
 
         private void GetDraggable()
         {
-            var pointerData = new PointerEventData(EventSystem.current);
+            var pointerData = new PointerEventData(EvSystem);
             pointerData.position = transform.position;
 
-            EventSystem.current.RaycastAll(pointerData, raycastResults);
+            EvSystem.RaycastAll(pointerData, raycastResults);
             foreach (var result in raycastResults)
             {
                 dragHandler = result.gameObject.GetComponentInParent<IDragHandler>();
@@ -168,6 +206,7 @@ namespace Gaze.VirtualPointer
                     dragEndHandler = result.gameObject.GetComponentInParent<IEndDragHandler>();
                     result.gameObject.GetComponentInParent<IBeginDragHandler>().OnBeginDrag(pointerData);
                     result.gameObject.GetComponentInParent<IInitializePotentialDragHandler>().OnInitializePotentialDrag(pointerData);
+                    dragHandler.OnDrag(pointerData);
                     return;
                 }
             }
@@ -177,7 +216,7 @@ namespace Gaze.VirtualPointer
         {
             if(dragEndHandler != null)
             {
-                var pointerData = new PointerEventData(EventSystem.current);
+                var pointerData = new PointerEventData(EvSystem);
                 pointerData.position = transform.position;
 
                 dragEndHandler.OnEndDrag(pointerData);
@@ -188,44 +227,37 @@ namespace Gaze.VirtualPointer
 
         private void TriggerEnter(Selectable selectable)
         {
-            var pointerData = new PointerEventData(EventSystem.current);
+            var pointerData = new PointerEventData(EvSystem);
             pointerData.position = transform.position;
             selectable.OnPointerEnter(pointerData);
         }
 
         private void TriggerExit(Selectable selectable)
         {
-            var pointerData = new PointerEventData(EventSystem.current);
+            var pointerData = new PointerEventData(EvSystem);
             pointerData.position = transform.position;
             selectable.OnPointerExit(pointerData);
         }
 
         private void TriggerPointerDown(Selectable selectable)
         {
-            var pointerData = new PointerEventData(EventSystem.current);
+            var pointerData = new PointerEventData(EvSystem);
             pointerData.position = transform.position;
             selectable.OnPointerDown(pointerData);
         }
 
         private void TriggerPointerUp(Selectable selectable)
         {
-            var pointerData = new PointerEventData(EventSystem.current);
+            var pointerData = new PointerEventData(EvSystem);
             pointerData.position = transform.position;
             selectable.OnPointerUp(pointerData);
         }
 
         private void TriggerSelect(Selectable selectable)
         {
-            var pointerData = new PointerEventData(EventSystem.current);
+            var pointerData = new PointerEventData(EvSystem);
             pointerData.position = transform.position;
             selectable.OnSelect(pointerData);
-
-            var submitable = selectable.GetComponent<ISubmitHandler>();
-
-            if(submitable != null)
-            {
-                submitable.OnSubmit(pointerData);
-            }
 
             var clickable = selectable.GetComponent<IPointerClickHandler>();
 
@@ -233,13 +265,23 @@ namespace Gaze.VirtualPointer
             {
                 clickable.OnPointerClick(pointerData);
             }
+
+            else
+            {
+                var submitable = selectable.GetComponent<ISubmitHandler>();
+
+                if (submitable != null)
+                {
+                    submitable.OnSubmit(pointerData);
+                }
+            }
         }
 
         private void TriggerDrag()
         {
             if (dragHandler != null)
             {
-                var pointerData = new PointerEventData(EventSystem.current);
+                var pointerData = new PointerEventData(EvSystem);
                 pointerData.position = transform.position;
                 dragHandler.OnDrag(pointerData);
             }
