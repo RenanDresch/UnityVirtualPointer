@@ -1,7 +1,9 @@
 {
-    "name": "Gaze.VirtualPointer",
+    "name": "GazeInteractive.VirtualPointer.Editor",
     "references": [],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

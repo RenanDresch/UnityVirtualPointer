@@ -1,14 +1,25 @@
 {
-    "name": "com.gazeinteractive.virtualpointer",
-    "displayName": "Virtual Pointer",
-    "version": "1.2.3",
-    "unity": "2018.3",
-    "description": "Adds a virtual pointer that interacts with the Unity Event System (UI/Canvas)",
-    "samples": [
-        {
-            "displayName": "Virtual Pointer Sample",
-            "description": "Example on how to implement/use the Virtual Pointer",
-            "path": "Samples/Sample"
-        }
-    ]
+  "name": "com.gazeinteractive.virtualpointer",
+  "displayName": "Virtual Pointer",
+  "version": "1.3.0",
+  "unity": "2018.3",
+  "description": "Adds a virtual pointer that interacts with the Unity Event System (UI/Canvas)",
+  "samples": [
+    {
+      "displayName": "Virtual Pointer Sample",
+      "description": "Example on how to implement/use the Virtual Pointer",
+      "path": "Samples/Sample"
+    }
+  ],
+  "keywords": [
+    "Gaze",
+    "Virtual",
+    "Pointer",
+    "VirtualPointer"
+  ],
+  "category": "UI",
+  "repository": {
+    "url": "https://github.com/RenanDresch/UnityVirtualPointer.git",
+    "type": "git"
+  }
 }

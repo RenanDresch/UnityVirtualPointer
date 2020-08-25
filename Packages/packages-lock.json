@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.gazeinteractive.virtualpointer": {
+      "version": "https://github.com/RenanDresch/UnityVirtualPointer.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "83d542bf169c30a5b8b0efc184dd418434a4d13d"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
