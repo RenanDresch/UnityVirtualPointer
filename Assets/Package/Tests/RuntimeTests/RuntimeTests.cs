@@ -4,6 +4,7 @@ using Gaze.VirtualPointer;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 using UnityEngine.UI;
 
@@ -14,6 +15,8 @@ namespace Tests
         [UnityTest]
         public IEnumerator PointerHierarchy()
         {
+            ClearScene();
+
             var pointer = new GameObject().AddComponent<VirtualPointer>();
             LogAssert.Expect(LogType.Error, "Pointer not within a canvas!");
 
@@ -27,13 +30,13 @@ namespace Tests
 
             yield return null;
             Assert.IsFalse(pointer == null);
-
-            Object.Destroy(canvas.gameObject);
         }
 
         [UnityTest]
         public IEnumerator PointerMove()
         {
+            ClearScene();
+
             var canvas = new GameObject().AddComponent<Canvas>().transform;
             var pointerGO = new GameObject();
             pointerGO.transform.SetParent(canvas);
@@ -41,13 +44,13 @@ namespace Tests
 
             yield return null;
             TestPointerMove(pointer);
-
-            Object.Destroy(canvas.gameObject);
         }
 
         [UnityTest]
         public IEnumerator PointerSetPosition()
         {
+            ClearScene();
+
             var canvas = new GameObject().AddComponent<Canvas>().transform;
             var pointerGO = new GameObject();
             pointerGO.transform.SetParent(canvas);
@@ -55,13 +58,13 @@ namespace Tests
 
             yield return null;
             TestPointerSetPosition(pointer);
-
-            Object.Destroy(canvas.gameObject);
         }
 
         [UnityTest]
         public IEnumerator PointerMixedMove()
         {
+            ClearScene();
+
             var canvas = new GameObject().AddComponent<Canvas>().transform;
             var pointerGO = new GameObject();
             pointerGO.transform.SetParent(canvas);
@@ -72,13 +75,13 @@ namespace Tests
             TestPointerSetPosition(pointer);
             TestPointerMove(pointer);
             TestPointerSetPosition(pointer);
-
-            Object.Destroy(canvas.gameObject);
         }
 
         [UnityTest]
         public IEnumerator PointerClick()
         {
+            ClearScene();
+
             var canvas = new GameObject().AddComponent<Canvas>().transform;
             canvas.gameObject.AddComponent<GraphicRaycaster>();
             var pointerGO = new GameObject();
@@ -112,13 +115,13 @@ namespace Tests
             }
 
             Assert.AreEqual(49, testVal);
-
-            Object.Destroy(canvas.gameObject);
         }
 
         [UnityTest]
         public IEnumerator Drag()
         {
+            ClearScene();
+
             var canvas = new GameObject().AddComponent<Canvas>().transform;
             canvas.gameObject.AddComponent<GraphicRaycaster>();
             var pointerGO = new GameObject();
@@ -150,6 +153,7 @@ namespace Tests
             newScrollBar.onValueChanged.AddListener((value) => result = value);
             //
 
+            //Scrollbar "clicks"
             pointer.SetPointerPosition(new Vector3(0, 5, 0));
             yield return null;
             pointer.PointerDown = true;
@@ -204,7 +208,23 @@ namespace Tests
 
             Assert.IsTrue(Mathf.Approximately(result, 1));
 
-            Object.Destroy(canvas.gameObject);
+            //
+
+            //Scrollbar drag
+
+            pointer.SetPointerPosition(new Vector3(0, 5, 0));
+            yield return null;
+            pointer.PointerDown = true;
+            yield return new WaitForSeconds(0.2f);
+
+            Assert.IsTrue(Mathf.Approximately(result, 0));
+
+            pointer.SetPointerPosition(new Vector3(100, 5, 0));
+            yield return new WaitForSeconds(0.2f);
+
+            Assert.IsTrue(Mathf.Approximately(result, 1));
+
+            //
         }
 
         private void TestPointerMove(VirtualPointer pointer)
@@ -251,6 +271,19 @@ namespace Tests
         private void ClickAddTest(ref int testInt)
         {
             testInt += 1;
+        }
+
+        private void ClearScene()
+        {
+            var roots = SceneManager.GetActiveScene().GetRootGameObjects();
+            
+            foreach(var root in roots)
+            {
+                if (root.name.ToLower() != "code-based tests runner")
+                {
+                    Object.Destroy(root);
+                }
+            }
         }
     }
 }
