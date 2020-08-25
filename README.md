@@ -1,4 +1,4 @@
-# Virtual Pointer
+# Virtual Pointer - V1.2.2
 A Destiny(game) like virtual pointer system that interacts with the UI/Canvas.
 
 ![example gif](https://raw.githubusercontent.com/RenanDresch/Unity-Virtual-Pointer/master/Readme/virtualpointer.gif)
