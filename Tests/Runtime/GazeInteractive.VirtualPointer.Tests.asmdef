@@ -1,9 +1,9 @@
 {
-    "name": "RuntimeTests",
+    "name": "GazeInteractive.VirtualPointer.Tests",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Gaze.VirtualPointer"
+        "GazeInteractive.VirtualPointer"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

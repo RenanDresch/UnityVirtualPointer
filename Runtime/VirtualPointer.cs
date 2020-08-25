@@ -77,6 +77,7 @@ namespace Gaze.VirtualPointer
             }
             set
             {
+                pointerDown = value;
                 if (value)
                 {
                     GetDraggable();
@@ -111,10 +112,10 @@ namespace Gaze.VirtualPointer
         #region Public Methods
 
         /// <summary>
-        /// Moves the pointer
+        /// Move the pointer additively by the exactly movement vector magnitude.
         /// </summary>
         /// <param name="movement">
-        /// Vector2 composed by the horizontal and vertical movement
+        /// Vector2 composed by the horizontal and vertical movement.
         /// </param>
         public void MovePointer(Vector2 movement)
         {
@@ -128,13 +129,13 @@ namespace Gaze.VirtualPointer
         }
 
         /// <summary>
-        /// Sets the pointer position
+        /// Sets the pointer position on the world.
         /// </summary>
         /// <param name="position">
-        /// The pointer position
+        /// The world position coordinates.
         /// </param>
 
-        public void SetPointerPosition(Vector3 position)
+        public void SetPointerPosition(Vector2 position)
         {
             var newPosition = position;
             newPosition.x = Mathf.Clamp(newPosition.x, 0, Screen.width);
