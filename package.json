@@ -1,7 +1,7 @@
 {
     "name": "com.gazeinteractive.virtualpointer",
     "displayName": "Virtual Pointer",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "unity": "2018.3",
     "description": "Adds a virtual pointer that interacts with the Unity Event System (UI/Canvas)",
     "samples": [
